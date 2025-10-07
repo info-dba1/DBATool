@@ -1,51 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import Dashboard from "./pages/Dashboard";
-import ResultsPage from "./pages/ResultsPage";
-import  "./App.css"
-
-export default function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  return (
-    <Router>
-      <div className="flex min-h-screen bg-gray-100 text-gray-900">
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div
-          className={`flex-1 transition-all duration-300 ${
-            sidebarOpen ? "ml-64" : "ml-20"
-          }`}
-        >
-          <header className="p-4 bg-white shadow flex items-center justify-between">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-md hover:bg-gray-200"
-            >
-              ☰
-            </button>
-            <h1 className="text-xl font-semibold">DentalDoc Dashboard</h1>
-          </header>
-
-          <main className="p-6">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/results" element={<ResultsPage />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
-    </Router>
-  );
-}
-
-import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
@@ -63,11 +17,7 @@ export default function App() {
       {isAuthenticated ? (
         <div className="flex min-h-screen bg-gray-100 text-gray-900">
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div
-            className={`flex-1 transition-all duration-300 ${
-              sidebarOpen ? "ml-64" : "ml-20"
-            }`}
-          >
+          <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? "ml-64" : "ml-20"}`}>
             <header className="p-4 bg-white shadow flex items-center justify-between">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -77,14 +27,13 @@ export default function App() {
               </button>
 
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold text-gray-800">
-                  DentalDoc Dashboard
-                </h1>
+                <h1 className="text-xl font-semibold text-gray-800">DentalDoc Dashboard</h1>
+
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsAuthenticated(false)}
-                  className="flex items-center gap-2  bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all"
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all"
                 >
                   <span className="text-sm font-medium cursor-pointer">Logout</span>
                   <svg
@@ -104,6 +53,7 @@ export default function App() {
                 </motion.button>
               </div>
             </header>
+
             <main className="p-6">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
@@ -115,10 +65,7 @@ export default function App() {
         </div>
       ) : (
         <Routes>
-          <Route
-            path="/"
-            element={<Login setIsAuthenticated={setIsAuthenticated} />}
-          />
+          <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
