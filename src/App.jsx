@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { supabase } from "./supabaseClient";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import ResultsPage from "./pages/ResultsPage";
@@ -11,13 +12,25 @@ import "./App.css";
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error during logout:", error.message);
+    } else {
+      setIsAuthenticated(false);
+    }
+  };
 
   return (
     <Router>
       {isAuthenticated ? (
         <div className="flex min-h-screen bg-gray-100 text-gray-900">
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? "ml-64" : "ml-20"}`}>
+          <div
+            className={`flex-1 transition-all duration-300 ${
+              sidebarOpen ? "ml-64" : "ml-20"
+            }`}
+          >
             <header className="p-4 bg-white shadow flex items-center justify-between">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -27,12 +40,12 @@ export default function App() {
               </button>
 
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold text-gray-800">DentalDoc Dashboard</h1>
+                
 
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsAuthenticated(false)}
+                  onClick={handleLogout} 
                   className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all"
                 >
                   <span className="text-sm font-medium cursor-pointer">Logout</span>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { supabase } from "../supabaseClient";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -9,18 +10,33 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+
     if (!name || !email || !password || !confirmPassword) {
       alert("Please fill all fields");
       return;
     }
+
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-    alert("Account created successfully!");
-    navigate("/");
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name },
+      },
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      alert("Account created successfully! Check your email to confirm.");
+      navigate("/");
+    }
   };
 
   return (
@@ -32,12 +48,14 @@ export default function Signup() {
         className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-blue-100"
       >
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
-          Create Account 
+          Create Account
         </h2>
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Full Name</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Full Name
+            </label>
             <input
               type="text"
               className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-300 outline-none"
@@ -47,7 +65,9 @@ export default function Signup() {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-300 outline-none"
@@ -57,7 +77,9 @@ export default function Signup() {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-300 outline-none"
@@ -67,7 +89,9 @@ export default function Signup() {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Confirm Password</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Confirm Password
+            </label>
             <input
               type="password"
               className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-300 outline-none"
