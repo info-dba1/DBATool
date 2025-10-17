@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite preview --host"
+    "start": "vite preview --host",
+    "vercel-build": "npm install && npm run build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.65.0",
