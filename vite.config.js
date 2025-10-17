@@ -6,10 +6,21 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
+    host: true
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
   },
-  base: '/',
+  base: './',
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  }
 });
